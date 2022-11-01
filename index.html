@@ -1,0 +1,58 @@
+<html>
+<head>
+  <style>
+	body{
+		font-family: sans-serif;
+		max-width: 900px;
+		margin: auto;
+	}
+	</style>
+
+  <title> Daelen's Lab 4 </title>
+  <!-- input the Leaflet CSS -->
+	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+	<!-- input the Leaflet JavaScript library -->
+	<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+  <!-- Leaflet.markercluster CSS links -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css"/>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css"/>
+  <!-- Leaflet.markercluster JS link -->
+  <script src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js"></script>
+  <!-- input of the leflet legend api if needed -->
+  <link rel="stylesheet" href="leaflet.legend.css" />
+	<script src="leaflet.legend.js"></script>
+</head>
+
+<body>
+  <!-- title  -->
+  <h1>Bike Racks in Cambridge Massachusets </h1>
+  <!-- this div creates the hold for hte map -->
+  <div id="map" style="height: 80vh"></div>
+  <!-- I will describe what i create here  -->
+  <p></p>
+  <!-- This script loads the bike data -->
+  <script type="text/javascript" src="bikeRacks2.js"></script>
+  <!-- This is where the map is built and made funcitonal  -->
+  <script>
+    var mymap = L.map('map').setView([42.3720822,-71.1088320],12);
+    // Base map is added here change if needed
+    var basemap = L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/terrain/{z}/{x}/{y}{r}.png', {
+      attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="https://    www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+    }).addTo(mymap);
+    // Adding in bike rack data as a variable so that it can be used with the leaflet cluster method
+    var bikeRacks = L.geoJson(data, {
+        pointToLayer: function(feature, latlng){
+        var marker = L.marker(latlng);
+        marker.bindPopup("Status: " + feature.properties.Status + "<br>Capacity:" + feature.properties.Capacity);
+        return marker;
+    }
+    });
+    // this is the use of the cluster points method
+    var clusters = L.markerClusterGroup({showCoverageOnHover: false});
+    clusters.addLayer(bikeRacks);
+    mymap.addLayer(clusters);
+
+
+    </script>
+</body>
+</html>
